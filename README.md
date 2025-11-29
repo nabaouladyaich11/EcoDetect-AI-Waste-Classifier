@@ -39,7 +39,7 @@ Supervisor: Dr. Omniah Nagoor
 
 ## 📱 Screenshots
 
-[Add screenshots of your app here]
+[Screenshots of thhe app should be added here ]
 
 ## 🌍 Contributing
 
