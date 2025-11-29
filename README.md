@@ -1,16 +1,46 @@
-# ai_waste_classifier
+# 🌱 EcoDetect - AI Waste Classification App
 
-A new Flutter project.
+An intelligent mobile application that uses AI to classify waste materials for proper recycling and environmental sustainability.
 
-## Getting Started
+## 📱 Features
 
-This project is a starting point for a Flutter application.
+- **AI-Powered Classification**: Identifies 6 waste categories (Plastic, Paper, Glass, Metal, Cardboard, Trash)
+- **Beautiful UI**: Modern, intuitive design with smooth animations
+- **Image Selection**: Easy gallery integration for waste item photos
+- **Confidence Scoring**: Shows classification confidence levels
+- **Environmental Tips**: Provides disposal guidance for each waste type
 
-A few resources to get you started if this is your first Flutter project:
+## 🚀 Technology Stack
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- **Frontend**: Flutter (Dart)
+- **AI Model**: HuggingFace Integration (EfficientNetB0)
+- **State Management**: Provider
+- **Image Processing**: Image Picker
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 👥 Team
+
+- Naba'a A. OuladYaich
+- Fatmah Ahmed Al-Zahrani
+- Renad Yasser Alansari
+- Fidaa Osama Filamban
+- Rawaa Majed Abdulhadi
+
+## 🎓 Project
+
+King Abdulaziz University - AI3104T AI System Design Course
+Supervisor: Dr. Omniah Nagoor
+
+## 🛠️ Installation
+
+1. Clone the repository
+2. Run `flutter pub get`
+3. Connect device/emulator
+4. Run `flutter run`
+
+## 📱 Screenshots
+
+[Add screenshots of your app here]
+
+## 🌍 Contributing
+
+This project supports Saudi Arabia's Vision 2030 environmental sustainability goals.
