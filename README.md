@@ -27,7 +27,7 @@ An intelligent mobile application that uses AI to classify waste materials for p
 
 ## 🎓 Project
 
-King Abdulaziz University - AI3104T AI System Design Course
+Umm-Alqura University  - AI3104T AI System Design Course
 Supervisor: Dr. Omniah Nagoor
 
 ## 🛠️ Installation
@@ -41,6 +41,3 @@ Supervisor: Dr. Omniah Nagoor
 
 [Screenshots of thhe app should be added here ]
 
-## 🌍 Contributing
-
-This project supports Saudi Arabia's Vision 2030 environmental sustainability goals.
