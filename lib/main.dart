@@ -1,23 +1,21 @@
+import 'package:ai_waste_classifier/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
-import 'screens/splash_screen.dart';
+import 'screens/auth/splash_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const EcoDetect());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class EcoDetect extends StatelessWidget {
+  const EcoDetect({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'AI Waste Classifier',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: const SplashScreen(),
+    return const MaterialApp(
+      title: 'EcoDetect',
       debugShowCheckedModeBanner: false,
+      home: SplashScreen(),
+      // home: const HomeScreen(),
     );
   }
 }
