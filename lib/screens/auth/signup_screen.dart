@@ -1,6 +1,7 @@
 import 'package:ai_waste_classifier/screens/auth/login_screen.dart';
 import 'package:ai_waste_classifier/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:ai_waste_classifier/supabase_client.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -27,7 +28,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     super.dispose();
   }
 
-  void _onSignUp() {
+  Future<void> _onSignUp() async {
     if (!_acceptedTerms) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -36,11 +37,46 @@ class _SignUpScreenState extends State<SignUpScreen> {
       );
       return;
     }
-    if (_formKey.currentState?.validate() ?? false) {
+
+    if (!(_formKey.currentState?.validate() ?? false)) {
+      return;
+    }
+
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+    final username = _usernameController.text.trim();
+
+    try {
+      // 1) Create auth user in Supabase
+      final response = await supabase.auth.signUp(
+        email: email,
+        password: password,
+        data: {'username': username},
+      );
+
+      final user = response.user;
+      if (user == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Signup failed. Please try again.')),
+        );
+        return;
+      }
+
+      // 2) Insert row into profiles table (linked by foreign key)
+      await supabase.from('profiles').insert({
+        'id': user.id, // must match auth.users.id
+        'username': username,
+        'email': email,
+      });
+
+      // 3) Go to home on success
+      if (!mounted) return;
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const HomeScreen(),
-        ),
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
+      );
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $error')),
       );
     }
   }

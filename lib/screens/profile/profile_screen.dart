@@ -1,6 +1,8 @@
 import 'package:ai_waste_classifier/widgets/profile_widgets/logout_button.dart';
 import 'package:ai_waste_classifier/widgets/profile_widgets/profile_form.dart';
 import 'package:ai_waste_classifier/widgets/profile_widgets/profile_header.dart';
+import 'package:ai_waste_classifier/screens/auth/login_screen.dart'; // NEW
+import 'package:ai_waste_classifier/supabase_client.dart'; // NEW
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -13,13 +15,39 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  // Controllers for user data (initially populated from stored data)
-  final TextEditingController _usernameController =
-      TextEditingController(text: 'User123');
-  final TextEditingController _emailController =
-      TextEditingController(text: 'user@example.com');
+  // Start empty; will be filled from Supabase
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
 
   bool _isEditMode = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProfile(); // load data when screen opens
+  }
+
+  Future<void> _loadProfile() async {
+    try {
+      final user = supabase.auth.currentUser; // auth user
+      if (user == null) return;
+
+      final data = await supabase
+          .from('profiles')
+          .select()
+          .eq('id', user.id)
+          .single(); // one row
+
+      _usernameController.text = (data['username'] ?? '').toString();
+      _emailController.text = (data['email'] ?? user.email ?? '').toString();
+
+      setState(() {}); // refresh ProfileHeader
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to load profile: $e')),
+      );
+    }
+  }
 
   @override
   void dispose() {
@@ -34,17 +62,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 
-  void _saveProfile() {
-    if (_formKey.currentState?.validate() ?? false) {
-      // TODO: Implement save logic (e.g., update backend/local storage)
+  Future<void> _saveProfile() async {
+    if (!(_formKey.currentState?.validate() ?? false)) return;
+
+    try {
+      final user = supabase.auth.currentUser;
+      if (user == null) return;
+
+      await supabase.from('profiles').update({
+        'username': _usernameController.text.trim(),
+        'email': _emailController.text.trim(),
+      }).eq('id', user.id); // only own row [web:33]
+
       setState(() {
         _isEditMode = false;
       });
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Profile updated successfully!'),
           backgroundColor: Color(0xFF1D5C3A),
         ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error updating profile: $e')),
       );
     }
   }
@@ -52,7 +94,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void _logout() {
     showDialog(
       context: context,
-      builder: (BuildContext context) {
+      builder: (BuildContext dialogContext) {
         return AlertDialog(
           backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
@@ -68,17 +110,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
           content: const Text('Are you sure you want to logout?'),
           actions: [
             TextButton(
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () => Navigator.of(dialogContext).pop(),
               child: Text(
                 'Cancel',
                 style: TextStyle(color: Colors.grey.shade700),
               ),
             ),
             ElevatedButton(
-              onPressed: () {
-                // TODO: Implement logout logic (clear session, navigate to login)
-                Navigator.of(context).pop();
-                // Navigator.of(context).pushReplacementNamed('/login');
+              onPressed: () async {
+                await supabase.auth.signOut(); // clear session [web:68]
+                if (!mounted) return;
+                Navigator.of(context).pop(); // close dialog
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (_) => const LoginScreen()),
+                  (route) => false,
+                );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.redAccent,

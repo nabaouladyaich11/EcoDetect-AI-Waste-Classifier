@@ -1,8 +1,16 @@
-import 'package:ai_waste_classifier/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'screens/auth/splash_screen.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Supabase.initialize(
+    url: 'https://vvongzrngxfpigyfeias.supabase.co',
+    anonKey:
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2b25nenJuZ3hmcGlneWZlaWFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3NzcyNTEsImV4cCI6MjA4MDM1MzI1MX0.8aCOhUdrG7p5av5g61RqBSpgrQmoSwUIWjCSNXymFOg',
+  );
+
   runApp(const EcoDetect());
 }
 

@@ -1,6 +1,7 @@
 import 'package:ai_waste_classifier/screens/auth/signup_screen.dart';
 import 'package:ai_waste_classifier/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:ai_waste_classifier/supabase_client.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -24,12 +25,28 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void _onLogin() {
-    if (_formKey.currentState?.validate() ?? false) {
+  Future<void> _onLogin() async {
+    if (!(_formKey.currentState?.validate() ?? false)) {
+      return;
+    }
+
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+
+    try {
+      // Supabase email/password login
+      await supabase.auth.signInWithPassword(
+        email: email,
+        password: password,
+      ); // [web:59]
+
+      if (!mounted) return;
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const HomeScreen(),
-        ),
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
+      );
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Login failed: $error')),
       );
     }
   }

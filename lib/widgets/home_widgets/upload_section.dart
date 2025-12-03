@@ -54,7 +54,7 @@ class UploadSection extends StatelessWidget {
                       children: [
                         Image.file(
                           selectedImage!,
-                          fit: BoxFit.cover,
+                          fit: BoxFit.contain,
                         ),
                         Positioned(
                           top: 8,
