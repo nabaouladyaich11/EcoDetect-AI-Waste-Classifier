@@ -39,5 +39,32 @@ Supervisor: Dr. Omniah Nagoor
 
 ## 📱 Screenshots
 
-[Screenshots of thhe app should be added here ]
 
+
+### Splash Screen
+<img src="screenshots/splashscreen.png" width="300"/>
+
+### Plastic Classification
+<img src="screenshots/plastic_results.png" width="300"/>
+<img src="screenshots/plastic_results1.png" width="300"/>
+
+### Paper Classification
+<img src="screenshots/paper_results1.png" width="300"/>
+
+### Glass Classification
+<img src="screenshots/glass_results.png" width="300"/>
+
+### Metal Classification
+<img src="screenshots/metal_result.png" width="300"/>
+
+### Cardboard Classification
+<img src="screenshots/card_board.png" width="300"/>
+
+### Trash Classification
+<img src="screenshots/trash_results.png" width="300"/>
+
+### Trash (Alternative Case)
+<img src="screenshots/trashclaissifaction2.png" width="300"/>
+
+### Uncertain Result
+<img src="screenshots/uncertain_result.png" width="300"/>

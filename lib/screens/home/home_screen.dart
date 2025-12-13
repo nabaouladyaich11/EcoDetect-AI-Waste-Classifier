@@ -5,6 +5,8 @@ import 'package:ai_waste_classifier/widgets/home_widgets/waste_categories_sectio
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:ai_waste_classifier/screens/results/results_screen.dart';
+import 'package:ai_waste_classifier/services/huggingface_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,6 +16,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  bool _isClassifying = false;
   File? _selectedImage;
   final ImagePicker _picker = ImagePicker();
 
@@ -26,11 +29,52 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void _classifyWaste() {
+  Future<void> _classifyWaste() async {
     if (_selectedImage == null) return;
-    // TODO: Implement waste classification logic
-    print('Classifying waste image: ${_selectedImage?.path}');
-    // Navigate to results screen or show classification result
+
+    setState(() {
+      _isClassifying = true;
+    });
+
+    try {
+      // Use your real HuggingFace model!
+      ClassificationResult result = await HuggingFaceService.classifyImage(_selectedImage!);
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ResultsScreen(
+            selectedImage: _selectedImage!,
+            classificationResult: result.predictedClass,
+            confidence: result.confidence,
+            // Remove allPredictions if ResultsScreen doesn't support it yet
+          ),
+        ),
+      );
+
+    } catch (e) {
+      _showErrorDialog('Classification failed: ${e.toString()}');
+    } finally {
+      setState(() {
+        _isClassifying = false;
+      });
+    }
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Error'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
   }
 
   void _clearImage() {
@@ -59,6 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     onPickImage: _pickImageFromGallery,
                     onClearImage: _clearImage,
                     onClassifyWaste: _classifyWaste,
+                    // Removed isClassifying parameter
                   ),
                   const SizedBox(height: 28),
                   const WasteCategoriesSection(),

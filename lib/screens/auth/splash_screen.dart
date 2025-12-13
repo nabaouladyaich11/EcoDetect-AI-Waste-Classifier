@@ -1,7 +1,5 @@
-import 'package:ai_waste_classifier/screens/auth/onboarding_one.dart';
 import 'package:flutter/material.dart';
 import 'package:ai_waste_classifier/screens/home/home_screen.dart';
-import 'package:ai_waste_classifier/supabase_client.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -14,20 +12,14 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+
     Future.delayed(const Duration(seconds: 2), () {
       if (!mounted) return;
 
-      final session =
-          supabase.auth.currentSession; // non-null = logged in [web:63]
-      if (session != null) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const HomeScreen()),
-        );
-      } else {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const OnboardingOne()),
-        );
-      }
+      // 🚀 Always go directly to HomeScreen
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => const HomeScreen()),
+      );
     });
   }
 
